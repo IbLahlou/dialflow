@@ -64,96 +64,102 @@ dialflow/
 
 
 ```mermaid
-graph TB
-    %% Client Layer
-    subgraph Client["Client Layer 👥"]
-        U["User/Customer 👤"] --> P["Phone Call 📞"]
-        AD["Admin Dashboard 🎛️"]
+graph TD
+    %% Frontend Application
+    subgraph Frontend["DialFlow Frontend (Next.js) 🎨"]
+        direction TB
+        
+        subgraph FE_App["App Layer 📱"]
+            Pages["Pages 📄"]
+            Layout["Layouts"]
+            Routes["Routes"]
+        end
+
+        subgraph FE_Comp["Components Layer 🧩"]
+            UI["UI Components"]
+            Dashboard["Dashboard Components"]
+            Forms["Form Components"]
+        end
+
+        subgraph FE_API["API Routes 🔌"]
+            FE_OpenAI["OpenAI Routes"]
+            FE_Twilio["Twilio Routes"]
+            FE_Voice["Voice Routes"]
+        end
+
+        subgraph FE_Lib["Libraries/Utils 🛠️"]
+            Utils["Utilities"]
+            Hooks["Custom Hooks"]
+            Types["TypeScript Types"]
+        end
     end
 
-    %% API Gateway Layer
-    subgraph Gateway["API Gateway 🚪"]
-        TW["Twilio Webhook 📡"]
-        API["NextJS API Routes 🛣️"]
+    %% Backend Application
+    subgraph Backend["DialFlow Backend (FastAPI/MLflow) ⚡"]
+        direction TB
+
+        subgraph BE_API["API Layer 🚀"]
+            REST["REST API"]
+            WebSocket["WebSocket"]
+            GraphQL["GraphQL"]
+        end
+
+        subgraph BE_Core["Core Services 🎯"]
+            CallEngine["Call Engine"]
+            VoiceProcessor["Voice Processor"]
+            LangProcessor["Language Processor"]
+            WorkflowEngine["Workflow Engine"]
+        end
+
+        subgraph MLOps["MLOps Layer 🧪"]
+            Training["Model Training"]
+            Serving["Model Serving"]
+            Monitor["Model Monitoring"]
+            Registry["Model Registry"]
+        end
+
+        subgraph BE_Data["Data Layer 💾"]
+            DB["PostgreSQL"]
+            Cache["Redis"]
+            VectorDB["Vector Store"]
+            ObjectStore["Object Storage"]
+        end
     end
 
-    %% Service Layer
-    subgraph Services["Service Layer ⚙️"]
-        TS["Telephony Service 📞"]
-        VS["Voice Service 🎙️"]
-        LS["Language Service 🌐"]
-        AS["Analytics Service 📊"]
-        WF["Workflow Engine 🔄"]
-    end
-
-    %% Integration Layer
-    subgraph Integrations["External Services 🔌"]
-        TWS["Twilio Service 📱"]
-        OAI["OpenAI Service 🤖"]
-        EL["ElevenLabs 🎧"]
-        CRM["CRM Systems 💼"]
-    end
-
-    %% Data Layer
-    subgraph Data["Data Layer 💾"]
-        FB[("Firebase DB 🔥")]
-        Cache[("Cache ⚡")]
-    end
-
-    %% MLOps Layer
-    subgraph MLOps["MLOps Layer 🧪"]
-        ML["MLflow 📈"]
-        ET["Experiment Tracking 🔬"]
-        MM["Model Monitoring 📡"]
+    %% External Services
+    subgraph External["External Services ☁️"]
+        TwilioAPI["Twilio API 📞"]
+        OpenAIAPI["OpenAI API 🤖"]
+        Firebase["Firebase 🔥"]
+        ElevenLabs["ElevenLabs 🎙️"]
     end
 
     %% Connections
-    P --> TW
-    AD --> API
+    FE_App --> FE_Comp
+    FE_Comp --> FE_API
+    FE_Comp --> FE_Lib
+    FE_API --> BE_API
     
-    TW --> TS
-    API --> TS
-    API --> VS
-    API --> LS
-    API --> AS
-    API --> WF
+    BE_API --> BE_Core
+    BE_Core --> MLOps
+    BE_Core --> BE_Data
+    MLOps --> BE_Data
     
-    TS <--> TWS
-    VS <--> OAI
-    VS <--> EL
-    LS <--> OAI
-    WF <--> CRM
-    
-    TS -.-> FB
-    VS -.-> FB
-    LS -.-> FB
-    AS -.-> FB
-    WF -.-> FB
-    
-    TS -.-> Cache
-    VS -.-> Cache
-    LS -.-> Cache
-
-    %% MLOps Connections
-    VS --> ML
-    LS --> ML
-    ML --> ET
-    ML --> MM
-    ET --> FB
-    MM --> FB
+    BE_Core --> External
+    FE_API --> External
 
     %% Styling
-    classDef primary fill:#4195FF,stroke:#333,stroke-width:2px,color:white
-    classDef secondary fill:#67DBFF,stroke:#333,stroke-width:2px,color:white
-    classDef external fill:#f9f9f9,stroke:#333,stroke-width:2px
-    classDef storage fill:#ddd,stroke:#333,stroke-width:2px
+    classDef frontend fill:#4195FF,stroke:#333,stroke-width:2px,color:white
+    classDef backend fill:#67DBFF,stroke:#333,stroke-width:2px,color:white
     classDef mlops fill:#FFB6C1,stroke:#333,stroke-width:2px,color:black
-    
-    class U,P,AD primary
-    class TW,API secondary
-    class TWS,OAI,EL,CRM external
-    class FB,Cache storage
-    class ML,ET,MM mlops
+    classDef data fill:#98FB98,stroke:#333,stroke-width:2px,color:black
+    classDef external fill:#f9f9f9,stroke:#333,stroke-width:2px
+
+    class FE_App,FE_Comp,FE_API,FE_Lib frontend
+    class BE_API,BE_Core backend
+    class MLOps,Training,Serving,Monitor,Registry mlops
+    class BE_Data,DB,Cache,VectorDB,ObjectStore data
+    class TwilioAPI,OpenAIAPI,Firebase,ElevenLabs external
 ```
 
 ## Getting Started
